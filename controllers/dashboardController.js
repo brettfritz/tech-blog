@@ -1,11 +1,10 @@
-// routes/dashboardRoutes.js
 
 const express = require('express');
 const router = express.Router();
 const { Post, User } = require('../models');
-const withAuth = require('../utils/auth');
+const withAuth = require('../utils/withAuth');
 
-// Get all posts for the logged-in user
+// Get all posts for the logged in user
 router.get('/', withAuth, async (req, res) => {
   try {
     const postData = await Post.findAll({

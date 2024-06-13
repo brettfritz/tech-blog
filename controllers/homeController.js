@@ -1,10 +1,10 @@
-// controllers/homeController.js
 
-const { Post, User, Comment } = require('../models');
+const { Post, User } = require('../models');
 
 const homeController = {
   renderHomePage: async (req, res) => {
     try {
+      // Fetch all posts with associated user information
       const posts = await Post.findAll({
         include: [
           {
@@ -15,40 +15,17 @@ const homeController = {
         order: [['createdAt', 'DESC']],
       });
 
-      res.render('home', { posts });
-    } catch (err) {
-      console.error(err);
-      res.status(500).json({ error: 'Internal server error' });
-    }
-  },
-
-  renderPostDetailPage: async (req, res) => {
-    try {
-      const { id } = req.params;
-
-      const post = await Post.findByPk(id, {
-        include: [
-          {
-            model: User,
-            attributes: ['username'],
-          },
-          {
-            model: Comment,
-            include: [{ model: User, attributes: ['username'] }],
-          },
-        ],
+      // Render the home page view with the retrieved posts
+      res.render('home', { 
+        title: 'Tech Blog | Home',
+        logged_in: req.session.logged_in,
+        posts 
       });
-
-      if (!post) {
-        return res.status(404).json({ error: 'Post not found' });
-      }
-
-      res.render('postDetail', { post });
     } catch (err) {
       console.error(err);
       res.status(500).json({ error: 'Internal server error' });
     }
-  },
+  }
 };
 
 module.exports = homeController;

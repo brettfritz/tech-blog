@@ -1,12 +1,15 @@
-// routes/commentRoutes.js
+console.log('Comment Controller is being loaded');
+
 
 const express = require('express');
 const router = express.Router();
 const { Comment } = require('../models');
-const withAuth = require('../utils/auth');
+const { User } = require('../models');
+const withAuth = require('../utils/withAuth');
 
 // Create a new comment
 router.post('/', withAuth, async (req, res) => {
+  console.log('Reached createComment route');
   try {
     const newComment = await Comment.create({
       content: req.body.content,
@@ -23,6 +26,7 @@ router.post('/', withAuth, async (req, res) => {
 
 // Get all comments for a specific post
 router.get('/:postId', async (req, res) => {
+  console.log('Reached getComments route');
   try {
     const commentsData = await Comment.findAll({
       where: { post_id: req.params.postId },
@@ -44,6 +48,7 @@ router.get('/:postId', async (req, res) => {
 
 // Update a comment
 router.put('/:id', withAuth, async (req, res) => {
+  console.log('Reached updateComment route');
   try {
     const updatedComment = await Comment.update(
       {
@@ -71,6 +76,7 @@ router.put('/:id', withAuth, async (req, res) => {
 
 // Delete a comment
 router.delete('/:id', withAuth, async (req, res) => {
+  console.log('Reached deleteComment route');
   try {
     const commentData = await Comment.destroy({
       where: {

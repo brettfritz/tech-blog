@@ -4,16 +4,14 @@ const session = require('express-session');
 const exphbs = require('express-handlebars');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
 const sequelize = require('./config/connection');
-const routes = require('./routes');
-
-// Import API routes
-const apiRoutes = require('./routes/api/apiRoutes');
+const apiRoutes = require('./routes/apiRoutes');
+require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 3001;
 
 const sess = {
-  secret: process.env.SESSION_SECRET,
+  secret: process.env.SESSION_SECRET || 'super secret secret',
   cookie: {},
   resave: false,
   saveUninitialized: true,
@@ -32,13 +30,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
-// Use API routes
-app.use('/api', apiRoutes);
+app.use('/', apiRoutes); // Use the single router for all routes
 
-// Use regular routes
-app.use(routes);
-
-sequelize.sync({ force: false }).then(() => {
+sequelize.sync({ force: true }).then(() => {
   app.listen(PORT, () => console.log(`Now listening on port ${PORT}`));
+}).catch(err => {
+  console.error('Unable to sync the database:', err);
 });
-

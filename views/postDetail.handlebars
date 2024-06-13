@@ -1,0 +1,29 @@
+
+{{#extend 'main'}}
+
+{{#content 'body'}}
+  <main>
+    <article>
+      <h1>{{post.title}}</h1>
+      <p>By {{post.user.username}} on {{post.createdAt}}</p>
+      <p>{{post.content}}</p>
+    </article>
+
+    <section>
+      <h2>Comments</h2>
+      {{#each post.comments}}
+        <div>
+          <p>{{comment_text}}</p>
+          <p>By {{user.username}} on {{createdAt}}</p>
+        </div>
+      {{/each}}
+    </section>
+
+    {{#if logged_in}}
+      <form class="comment-form">
+        <textarea name="comment-body" required></textarea>
+        <button type="submit">Add Comment</button>
+      </form>
+    {{/if}}
+  </main>
+{{/content}}

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{title}}</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <header>
+    <nav>
+      <a href="/">Home</a>
+      {{#if logged_in}}
+      <a href="/dashboard">Dashboard</a>
+      <a href="#" id="logout">Logout</a>
+      {{else}}
+      <a href="/login">Login</a>
+      <a href="/signup">Sign Up</a>
+      {{/if}}
+    </nav>
+  </header>
+
+  {{{body}}}
+
+  <script src="/js/login.js"></script>
+  <script src="/js/signup.js"></script>
+  <script src="/js/post.js"></script>
+  <script src="/js/comment.js"></script>
+  <script>
+    document.getElementById('logout').addEventListener('click', async () => {
+      const response = await fetch('/api/users/logout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+      });
+
+      if (response.ok) {
+        document.location.replace('/');
+      } else {
+        alert('Failed to log out.');
+      }
+    });
+  </script>
+</body>
+</html>

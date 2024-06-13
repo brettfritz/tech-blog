@@ -1,17 +1,15 @@
-// routes/userRoutes.js
 
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
 const { User } = require('../models');
-const withAuth = require('../utils/auth');
+const withAuth = require('../utils/withAuth');
 
-// Register new user
-router.post('/register', async (req, res) => {
+// Signup new user
+router.post('/signup', async (req, res) => {
   try {
     const newUser = await User.create({
       username: req.body.username,
-      email: req.body.email,
       password: req.body.password,
     });
 
@@ -31,17 +29,17 @@ router.post('/register', async (req, res) => {
 // Login existing user
 router.post('/login', async (req, res) => {
   try {
-    const userData = await User.findOne({ where: { email: req.body.email } });
+    const userData = await User.findOne({ where: { username: req.body.username } });
 
     if (!userData) {
-      res.status(400).json({ message: 'Incorrect email or password, please try again' });
+      res.status(400).json({ message: 'Incorrect username or password, please try again' });
       return;
     }
 
     const validPassword = await bcrypt.compare(req.body.password, userData.password);
 
     if (!validPassword) {
-      res.status(400).json({ message: 'Incorrect email or password, please try again' });
+      res.status(400).json({ message: 'Incorrect username or password, please try again' });
       return;
     }
 

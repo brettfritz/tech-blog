@@ -1,0 +1,27 @@
+
+{{#extend 'main'}}
+
+{{#content 'body'}}
+  <main>
+    <h1>Dashboard</h1>
+    <form class="new-post-form">
+      <label for="post-title">Title</label>
+      <input type="text" id="post-title" name="title" required>
+
+      <label for="post-content">Content</label>
+      <textarea id="post-content" name="content" required></textarea>
+
+      <button type="submit">Create Post</button>
+    </form>
+
+    <section class="post-list">
+      {{#each posts}}
+        <article>
+          <h2>{{title}}</h2>
+          <p>{{content}}</p>
+          <button data-id="{{id}}" class="delete-post-btn">Delete Post</button>
+        </article>
+      {{/each}}
+    </section>
+  </main>
+{{/content}}
